@@ -1,0 +1,89 @@
+name: Build a docker image and push to the container registry
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths-ignore:
+    - 'src/Shared/**'
+    - 'README.ME'
+    - 'doc/**'
+
+env:
+  PROJECT_NAME: f8t
+  SERVICE_NAME: registr
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+       docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }}:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }}:latest -f ./src/Bz.F8t.Registration.WebAPI/Dockerfile
+       docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }} --all-tags
+
+    # TODO: Scan docker images for vulnerabilities
+
+    # Get secrets form Azure KeyVault
+    - name: 'Get AppInsights connection string from Azure KeyVault'
+      uses: theotow/keyvault-secret-azure@v1
+      with:
+        key-vault-name: kv-${{ env.PROJECT_NAME }}-${{ vars.ENVIRONMENT }}-${{ vars.AZURE_REGION_SHORT_NAME }}
+        config: |
+          {"APP_INSIGHTS_CONNSTR": "ConnectionString-Fott-AppInsights"}
+    - name: 'Get database connection string from Azure KeyVault'
+      uses: theotow/keyvault-secret-azure@v1
+      with:
+        key-vault-name: kv-${{ env.PROJECT_NAME }}-${{ vars.ENVIRONMENT }}-${{ vars.AZURE_REGION_SHORT_NAME }}
+        config: |
+          {"DB_REGISTR_CONNSTR": "ConnectionString-Fott-Registration-Postgres"}
+    - name: 'Get ServiceBus connection string from Azure KeyVault'
+      uses: theotow/keyvault-secret-azure@v1
+      with:
+        key-vault-name: kv-${{ env.PROJECT_NAME }}-${{ vars.ENVIRONMENT }}-${{ vars.AZURE_REGION_SHORT_NAME }}
+        config: |
+          {"SERVICE_BUS_CONNSTR": "ConnectionString-Fott-ServiceBus"}
+
+    - name: 'Prepare k8s deployment'
+      run: envsubst < k8s/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }}.yaml > k8s/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }}-prepared.yaml
+
+    # Deploy to AKS
+    - name: 'Set the target AKS cluster'
+      uses: Azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: 'aks-${{ env.PROJECT_NAME }}-${{ vars.ENVIRONMENT }}-${{ vars.AZURE_REGION_SHORT_NAME }}'
+        resource-group: 'rg-${{ env.PROJECT_NAME }}-${{ vars.ENVIRONMENT }}-${{ vars.AZURE_REGION_SHORT_NAME }}'
+
+    # Get secrets from Azure KeyVault to environments
+    - name: 'Create k8s secrets'
+      uses: Azure/k8s-create-secret@v1
+      with:
+        container-registry-url: '${{ secrets.REGISTRY_LOGIN_SERVER }}'
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        secret-name: k8s-secret
+
+    # TODO: Pass secrets from environments to k8s cluster
+
+    - name: 'Deploy to AKS cluster'
+      uses: Azure/k8s-deploy@v1
+      with:
+        manifests: |
+          k8s/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }}-prepared.yaml
+        images: |
+          ${{ secrets.REGISTRY_LOGIN_SERVER }}/bz-${{ env.PROJECT_NAME }}-${{ env.SERVICE_NAME }}:${{ github.sha }}
+        imagepullsecrets: |
+          k8s-secret
