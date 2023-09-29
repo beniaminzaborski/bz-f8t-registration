@@ -39,6 +39,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{AAA7FA7C-4D2
 		k8s\bz-f8t-registr.yaml = k8s\bz-f8t-registr.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{16EC8DD4-6EF8-4D1F-987D-5CD05F054E44}"
+	ProjectSection(SolutionItems) = preProject
+		src\Shared\Directory.Build.props = src\Shared\Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bz.F8t.Registration.Messaging", "src\Shared\Bz.F8t.Registration.Messaging\Bz.F8t.Registration.Messaging.csproj", "{D8206433-59DC-426F-8E18-2B8F564C6FB2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +72,10 @@ Global
 		{57455E30-9F4E-4520-BC67-2C66A208F76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57455E30-9F4E-4520-BC67-2C66A208F76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57455E30-9F4E-4520-BC67-2C66A208F76F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8206433-59DC-426F-8E18-2B8F564C6FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8206433-59DC-426F-8E18-2B8F564C6FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8206433-59DC-426F-8E18-2B8F564C6FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8206433-59DC-426F-8E18-2B8F564C6FB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +87,8 @@ Global
 		{A617FE41-1B14-4657-911B-2F0C8C3CAB95} = {A91950C1-1043-4698-B967-16ED1F728C03}
 		{0D772D28-6BD1-4A62-A984-A65B3F5535DE} = {49D5B21D-6CC9-469A-B8E6-60DA51BFA968}
 		{57455E30-9F4E-4520-BC67-2C66A208F76F} = {A91950C1-1043-4698-B967-16ED1F728C03}
+		{16EC8DD4-6EF8-4D1F-987D-5CD05F054E44} = {A91950C1-1043-4698-B967-16ED1F728C03}
+		{D8206433-59DC-426F-8E18-2B8F564C6FB2} = {16EC8DD4-6EF8-4D1F-987D-5CD05F054E44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7FF9B86C-B7C7-43BE-A3B1-F3D2388C4C10}

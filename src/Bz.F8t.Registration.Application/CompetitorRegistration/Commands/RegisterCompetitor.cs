@@ -1,6 +1,7 @@
 ﻿namespace Bz.F8t.Registration.Application.CompetitorRegistration;
 
-public record RegistrationRequestDto(
+public sealed record RegisterCompetitor(
+    Guid RequestId,
     Guid CompetitionId,
     string FirstName,
     string LastName,
