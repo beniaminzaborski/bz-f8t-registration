@@ -1,12 +1,11 @@
 using Azure.Messaging.ServiceBus;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.SignalRService;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Text.Json.Nodes;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Functions.Worker;
 
 namespace Bz.F8t.Registration.NumberAssignatorAzFunction;
 
@@ -20,7 +19,7 @@ public class CompetitorNotificationFunction
         _logger = logger;
     }
 
-    [FunctionName("CompetitorNotificationFunction")]
+    [Function("CompetitorNotificationFunction")]
     public async Task Run(
         [ServiceBusTrigger("registration-completed-events-to-registr-service", Connection = "ServiceBusConnectionString")] ServiceBusReceivedMessage receivedMessage,
         [SignalR(HubName = "notifications", ConnectionStringSetting = "SignalRConnectionString")] IAsyncCollector<SignalRMessage> signalrMessage,

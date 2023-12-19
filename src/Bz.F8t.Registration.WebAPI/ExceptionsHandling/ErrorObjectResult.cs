@@ -32,11 +32,6 @@ internal class ErrorObjectResult : ObjectResult
                 break;
         }
 
-        var errorResponse = new ErrorResponseDto
-        {
-            Message = message
-        };
-
-        return new ErrorObjectResult(errorResponse, httpStatusCode);
+        return new ErrorObjectResult(new ErrorResponseDto(message), httpStatusCode);
     }
 }

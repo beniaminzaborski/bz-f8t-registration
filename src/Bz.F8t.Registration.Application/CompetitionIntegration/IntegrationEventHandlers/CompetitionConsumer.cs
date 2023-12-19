@@ -6,24 +6,17 @@ using Bz.F8t.Administration.Messaging;
 
 namespace Bz.F8t.Registration.Application.CompetitionIntegration;
 
-public class CompetitionConsumer :
+public class CompetitionConsumer(
+    ILogger<CompetitionConsumer> logger,
+    IUnitOfWork unitOfWork,
+    ICompetitionRepository competitionRepository) :
     IConsumer<CompetitionOpenedForRegistrationIntegrationEvent>,
     IConsumer<CompetitionRegistrationCompletedIntegrationEvent>,
     IConsumer<CompetitionMaxCompetitorsIncreasedIntegrationEvent>
 {
-    private readonly ILogger<CompetitionConsumer> _logger;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICompetitionRepository _competitionRepository;
-
-    public CompetitionConsumer(
-        ILogger<CompetitionConsumer> logger,
-        IUnitOfWork unitOfWork,
-        ICompetitionRepository competitionRepository)
-    {
-        _logger = logger;
-        _unitOfWork = unitOfWork;
-        _competitionRepository = competitionRepository;
-    }
+    private readonly ILogger<CompetitionConsumer> _logger = logger;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICompetitionRepository _competitionRepository = competitionRepository;
 
     public async Task Consume(ConsumeContext<CompetitionOpenedForRegistrationIntegrationEvent> context)
     {

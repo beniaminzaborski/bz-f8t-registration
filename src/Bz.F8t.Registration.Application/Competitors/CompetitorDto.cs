@@ -1,6 +1,6 @@
 ﻿namespace Bz.F8t.Registration.Application.Competitors;
 
-public record CompetitorDto
+public sealed record CompetitorDto
 {
     public Guid Id { get; init; }
     public Guid CompetitionId { get; init; }

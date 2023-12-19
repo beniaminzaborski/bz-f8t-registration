@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
@@ -44,7 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{16EC8D
 		src\Shared\Directory.Build.props = src\Shared\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bz.F8t.Registration.Messaging", "src\Shared\Bz.F8t.Registration.Messaging\Bz.F8t.Registration.Messaging.csproj", "{D8206433-59DC-426F-8E18-2B8F564C6FB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bz.F8t.Registration.Messaging", "src\Shared\Bz.F8t.Registration.Messaging\Bz.F8t.Registration.Messaging.csproj", "{D8206433-59DC-426F-8E18-2B8F564C6FB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

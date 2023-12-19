@@ -6,21 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Bz.F8t.Registration.Application.CompetitorIntegration;
 
-public class CompetitorConsumer : IConsumer<CompetitorTimeCalculatedIntegrationEvent>
+public class CompetitorConsumer(
+    ILogger<CompetitorConsumer> logger,
+    IUnitOfWork unitOfWork,
+    ICompetitorRepository competitorRepository) : IConsumer<CompetitorTimeCalculatedIntegrationEvent>
 {
-    private readonly ILogger<CompetitorConsumer> _logger;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICompetitorRepository _competitorRepository;
-
-    public CompetitorConsumer(
-        ILogger<CompetitorConsumer> logger,
-        IUnitOfWork unitOfWork,
-        ICompetitorRepository competitorRepository)
-    {
-        _logger = logger;
-        _unitOfWork = unitOfWork;
-        _competitorRepository = competitorRepository;
-    }
+    private readonly ILogger<CompetitorConsumer> _logger = logger;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly ICompetitorRepository _competitorRepository = competitorRepository;
 
     public async Task Consume(ConsumeContext<CompetitorTimeCalculatedIntegrationEvent> context)
     {

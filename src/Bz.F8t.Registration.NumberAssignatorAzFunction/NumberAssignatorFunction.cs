@@ -1,11 +1,10 @@
 ﻿using Azure.Messaging.ServiceBus;
-using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using MassTransit;
 using Bz.F8t.Registration.NumberAssignatorAzFunction.Consumers;
-using Microsoft.Azure.WebJobs.Extensions.SignalRService;
+using Microsoft.Azure.Functions.Worker;
 
 namespace Bz.F8t.Registration.NumberAssignatorAzFunction;
 
@@ -23,7 +22,7 @@ public class NumberAssignatorFunction
         _logger = logger;
     }
 
-    [FunctionName("NumberAssignatorFunction")]
+    [Function("NumberAssignatorFunction")]
     public async Task Run(
         [ServiceBusTrigger(QueueName, Connection = "ServiceBusConnectionString")] ServiceBusReceivedMessage receivedMessage,
         CancellationToken cancellationToken)

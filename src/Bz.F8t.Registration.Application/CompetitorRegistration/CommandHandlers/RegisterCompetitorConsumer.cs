@@ -3,14 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Bz.F8t.Registration.Application.CompetitorRegistration;
 
-public class RegisterCompetitorConsumer : IConsumer<RegisterCompetitor>
+public class RegisterCompetitorConsumer(ILogger<RegisterCompetitorConsumer> logger) : IConsumer<RegisterCompetitor>
 {
-    private readonly ILogger<RegisterCompetitorConsumer> _logger;
-
-    public RegisterCompetitorConsumer(ILogger<RegisterCompetitorConsumer> logger)
-    {
-        _logger = logger;
-    }
+    private readonly ILogger<RegisterCompetitorConsumer> _logger = logger;
 
     public async Task Consume(ConsumeContext<RegisterCompetitor> context)
     {

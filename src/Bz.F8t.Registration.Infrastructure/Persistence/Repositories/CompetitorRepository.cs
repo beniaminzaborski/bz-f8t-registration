@@ -6,12 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bz.F8t.Registration.Infrastructure.Persistence.Repositories;
 
-internal class CompetitorRepository : Repository<Competitor, CompetitorId, ApplicationDbContext>, ICompetitorRepository
+internal class CompetitorRepository(ApplicationDbContext dbContext) : Repository<Competitor, CompetitorId, ApplicationDbContext>(dbContext), ICompetitorRepository
 {
-    public CompetitorRepository(ApplicationDbContext dbContext) : base(dbContext)
-    {
-    }
-
     public async Task<IEnumerable<Competitor>> GetAllByCompetitionIdAsync(CompetitionId competitionId)
     {
         return await _dbContext.Set<Competitor>()

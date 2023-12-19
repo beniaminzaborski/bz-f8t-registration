@@ -5,24 +5,16 @@ using MassTransit;
 
 namespace Bz.F8t.Registration.Application.CompetitorRegistration;
 
-internal class RegistrationService : IRegistrationService
+internal class RegistrationService(
+    IValidator<RegistrationRequestDto> registrationRequestDtoValidator,
+    ISendEndpointProvider sendEndpointProvider,
+    ICompetitionRepository competitionRepository,
+    ICompetitorRepository competitorRepository) : IRegistrationService
 {
-    private readonly IValidator<RegistrationRequestDto> _registrationRequestDtoValidator;
-    private readonly ISendEndpointProvider _sendEndpointProvider;
-    private readonly ICompetitionRepository _competitionRepository;
-    private readonly ICompetitorRepository _competitorRepository;
-
-    public RegistrationService(
-        IValidator<RegistrationRequestDto> registrationRequestDtoValidator,
-        ISendEndpointProvider sendEndpointProvider,
-        ICompetitionRepository competitionRepository,
-        ICompetitorRepository competitorRepository)
-    {
-        _registrationRequestDtoValidator = registrationRequestDtoValidator;
-        _sendEndpointProvider = sendEndpointProvider;
-        _competitionRepository = competitionRepository;
-        _competitorRepository = competitorRepository;
-    }
+    private readonly IValidator<RegistrationRequestDto> _registrationRequestDtoValidator = registrationRequestDtoValidator;
+    private readonly ISendEndpointProvider _sendEndpointProvider = sendEndpointProvider;
+    private readonly ICompetitionRepository _competitionRepository = competitionRepository;
+    private readonly ICompetitorRepository _competitorRepository = competitorRepository;
 
     public async Task<Guid> RegisterAsync(RegistrationRequestDto dto)
     {

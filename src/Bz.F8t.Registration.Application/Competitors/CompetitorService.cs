@@ -4,18 +4,12 @@ using Bz.F8t.Registration.Domain.Competitors;
 
 namespace Bz.F8t.Registration.Application.Competitors;
 
-internal class CompetitorService : ICompetitorService
+internal class CompetitorService(
+    ICompetitorRepository competitorRepository,
+    IMapper mapper) : ICompetitorService
 {
-    private readonly ICompetitorRepository _competitorRepository;
-    private readonly IMapper _mapper;
-
-    public CompetitorService(
-        ICompetitorRepository competitorRepository,
-        IMapper mapper)
-    {
-        _competitorRepository = competitorRepository;
-        _mapper = mapper;
-    }
+    private readonly ICompetitorRepository _competitorRepository = competitorRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<IEnumerable<CompetitorDto>> GetCompetitorsAsync(Guid competitionId)
     {
